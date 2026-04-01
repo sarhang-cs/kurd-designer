@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kurd Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">KD</div>
+        <div>
+          <h1>Kurd Designer</h1>
+          <p>ئامرازێکی وێنەکاری و دیزاین بە زمانی کوردی</p>
+        </div>
+      </div>
+
+      <section class="panel">
+        <h2>ئامرازەکان</h2>
+        <div class="tool-grid">
+          <button class="tool-btn active" data-tool="brush">✏️ پەڕە</button>
+          <button class="tool-btn" data-tool="eraser">🧽 سڕینەوە</button>
+          <button class="tool-btn" data-tool="line">📏 هێڵ</button>
+          <button class="tool-btn" data-tool="rect">▭ چوارگۆشە</button>
+          <button class="tool-btn" data-tool="circle">⚪ بازنە</button>
+          <button class="tool-btn" data-tool="text">🔤 نووسین</button>
+          <button class="tool-btn" data-tool="pan">✋ گواستنەوە</button>
+          <button class="tool-btn" id="clearCanvas">🗑️ پاککردنەوە</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>کۆنترۆڵ</h2>
+        <label>ڕەنگ
+          <input type="color" id="colorPicker" value="#7c3aed" />
+        </label>
+        <label>ئەستووری
+          <input type="range" id="brushSize" min="1" max="80" value="8" />
+        </label>
+        <label>ڕووناکی
+          <input type="range" id="brightness" min="50" max="150" value="100" />
+        </label>
+        <label>کۆنتراست
+          <input type="range" id="contrast" min="50" max="150" value="100" />
+        </label>
+        <label>تەم
+          <input type="range" id="blur" min="0" max="8" value="0" />
+        </label>
+      </section>
+
+      <section class="panel">
+        <h2>فلتەرە خێراکان</h2>
+        <div class="stack">
+          <button class="secondary-btn filter-btn" data-filter="none">ئاسایی</button>
+          <button class="secondary-btn filter-btn" data-filter="grayscale(1)">ڕەش و سپی</button>
+          <button class="secondary-btn filter-btn" data-filter="sepia(1)">سێپیا</button>
+          <button class="secondary-btn filter-btn" data-filter="invert(1)">پێچەوانە</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>پرۆژە</h2>
+        <div class="stack">
+          <button class="secondary-btn" id="newProject">پرۆژەی نوێ</button>
+          <label class="upload-btn">
+            📂 بارکردنی وێنە
+            <input type="file" id="imageLoader" accept="image/*" hidden />
+          </label>
+          <button class="secondary-btn" id="saveProject">💾 پاشەکەوتی پرۆژە</button>
+          <label class="upload-btn">
+            ♻️ کردنەوەی پرۆژە
+            <input type="file" id="projectLoader" accept=".json" hidden />
+          </label>
+        </div>
+      </section>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div class="topbar-group">
+          <button class="primary-btn" id="undoBtn">↩️ گەڕانەوە</button>
+          <button class="primary-btn" id="redoBtn">↪️ دووبارەکردنەوە</button>
+          <button class="primary-btn" id="downloadPng">⬇️ وەک PNG</button>
+          <button class="primary-btn" id="downloadJpg">⬇️ وەک JPG</button>
+        </div>
+        <div class="topbar-group">
+          <button class="zoom-btn" data-zoom="out">➖</button>
+          <span id="zoomLabel">100%</span>
+          <button class="zoom-btn" data-zoom="in">➕</button>
+        </div>
+      </header>
+
+      <section class="workspace-body">
+        <div class="canvas-stage" id="stage">
+          <canvas id="editorCanvas" width="1400" height="900"></canvas>
+          <div id="textHint" class="text-hint hidden">لە شوێنەکە کلیک بکە بۆ زیادکردنی نووسین</div>
+        </div>
+
+        <aside class="inspector">
+          <section class="panel">
+            <h2>زانیاری</h2>
+            <div class="info-row"><span>ئامراز</span><strong id="activeToolLabel">پەڕە</strong></div>
+            <div class="info-row"><span>قەبارەی بوم</span><strong>1400 × 900</strong></div>
+            <div class="info-row"><span>قۆناغ</span><strong id="historyCount">1</strong></div>
+          </section>
+
+          <section class="panel">
+            <h2>فەرمانی خێرا</h2>
+            <ul class="tips">
+              <li><strong>B</strong> پەڕە</li>
+              <li><strong>E</strong> سڕەر</li>
+              <li><strong>T</strong> نووسین</li>
+              <li><strong>R</strong> چوارگۆشە</li>
+              <li><strong>C</strong> بازنە</li>
+              <li><strong>L</strong> هێڵ</li>
+              <li><strong>Ctrl/Cmd + Z</strong> گەڕانەوە</li>
+              <li><strong>Ctrl/Cmd + Shift + Z</strong> دووبارەکردنەوە</li>
+            </ul>
+          </section>
+
+          <section class="panel">
+            <h2>دەربارە</h2>
+            <p class="about">
+              ئەم وێبسایتە شێوازی Photoshop ـی لەخۆگرتووە، بەڵام وەشانی ئێستای ئەم پرۆژەیە ئامرازە سەرەکییەکانی وێنەکاری،
+              شێوەسازی، فلتەر، نووسین، بارکردنی وێنە و دابەزاندنی کارەکانت دابین دەکات.
+            </p>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
